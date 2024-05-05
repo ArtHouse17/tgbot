@@ -1,0 +1,22 @@
+2024-05-05 20:46:53,051 INFO a.c.t.TesttgbotApplication [main] Starting TesttgbotApplication using Java 22.0.1 with PID 8726 (/Users/artemdemidov/Downloads/testtgbot/target/classes started by artemdemidov in /Users/artemdemidov/Downloads/testtgbot)
+2024-05-05 20:46:53,052 INFO a.c.t.TesttgbotApplication [main] No active profile set, falling back to 1 default profile: "default"
+2024-05-05 20:46:53,887 INFO a.c.t.TesttgbotApplication [main] Started TesttgbotApplication in 0.959 seconds (process running for 1.334)
+2024-05-05 20:47:39,633 INFO a.c.t.s.TelegramBot [LearnprojBot Telegram Executor] reply: Hello there ArtHouse you look great
+2024-05-05 20:47:58,140 INFO a.c.t.s.TelegramBot [LearnprojBot Telegram Executor] reply: Hello there ArtHouse you look great
+2024-05-05 20:49:07,334 INFO a.c.t.TesttgbotApplication [main] Starting TesttgbotApplication using Java 22.0.1 with PID 8788 (/Users/artemdemidov/Downloads/testtgbot/target/classes started by artemdemidov in /Users/artemdemidov/Downloads/testtgbot)
+2024-05-05 20:49:07,334 INFO a.c.t.TesttgbotApplication [main] No active profile set, falling back to 1 default profile: "default"
+2024-05-05 20:49:07,943 INFO a.c.t.TesttgbotApplication [main] Started TesttgbotApplication in 0.737 seconds (process running for 1.158)
+2024-05-05 20:49:15,374 INFO a.c.t.s.TelegramBot [LearnprojBot Telegram Executor] reply: Hello there ArtHouse you look great
+2024-05-05 20:49:26,341 INFO a.c.t.s.TelegramBot [LearnprojBot Telegram Executor] reply: Hello there ArtHouse you look great
+2024-05-05 20:51:26,781 INFO a.c.t.TesttgbotApplication [main] Starting TesttgbotApplication using Java 22.0.1 with PID 8814 (/Users/artemdemidov/Downloads/testtgbot/target/classes started by artemdemidov in /Users/artemdemidov/Downloads/testtgbot)
+2024-05-05 20:51:26,781 INFO a.c.t.TesttgbotApplication [main] No active profile set, falling back to 1 default profile: "default"
+2024-05-05 20:51:27,425 INFO a.c.t.TesttgbotApplication [main] Started TesttgbotApplication in 0.783 seconds (process running for 1.139)
+2024-05-05 20:52:24,745 INFO a.c.t.s.TelegramBot [LearnprojBot Telegram Executor] reply: Hello there ArtHouse you look great
+2024-05-05 20:52:25,560 INFO a.c.t.s.TelegramBot [LearnprojBot Telegram Executor] reply: Hello there ArtHouse you look great
+2024-05-05 20:52:26,277 INFO a.c.t.s.TelegramBot [LearnprojBot Telegram Executor] reply: Hello there ArtHouse you look great
+2024-05-05 20:55:56,226 INFO a.c.t.TesttgbotApplication [main] Starting TesttgbotApplication using Java 22.0.1 with PID 8861 (/Users/artemdemidov/Downloads/testtgbot/target/classes started by artemdemidov in /Users/artemdemidov/Downloads/testtgbot)
+2024-05-05 20:55:56,227 DEBUG a.c.t.TesttgbotApplication [main] Running with Spring Boot v3.2.5, Spring v6.1.6
+2024-05-05 20:55:56,227 INFO a.c.t.TesttgbotApplication [main] No active profile set, falling back to 1 default profile: "default"
+2024-05-05 20:55:56,833 INFO a.c.t.TesttgbotApplication [main] Started TesttgbotApplication in 0.745 seconds (process running for 1.094)
+2024-05-05 20:56:06,610 INFO a.c.t.s.TelegramBot [LearnprojBot Telegram Executor] reply: Hello there ArtHouse you look great
+2024-05-05 20:56:07,662 INFO a.c.t.s.TelegramBot [LearnprojBot Telegram Executor] reply: Hello there ArtHouse you look great
