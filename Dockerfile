@@ -1,0 +1,6 @@
+FROM openjdk:17
+LABEL authors="artemdemidov"
+
+ENV BOT_TOCKEN = 7043746523:AAFrDH60qtp_ZHUmVGx7U97M8ZqG4B56NOs
+
+ENTRYPOINT ["top", "-b"]
