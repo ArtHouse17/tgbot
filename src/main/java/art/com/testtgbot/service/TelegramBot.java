@@ -1,11 +1,14 @@
 package art.com.testtgbot.service;
 
 import art.com.testtgbot.config.BotConfig;
+import art.com.testtgbot.model.Ads;
+import art.com.testtgbot.model.AdsRepisitory;
 import art.com.testtgbot.model.User;
 import art.com.testtgbot.model.UserRepository;
 import com.vdurmont.emoji.EmojiParser;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.commands.SetMyCommands;
@@ -30,6 +33,9 @@ import java.util.List;
 public class TelegramBot extends TelegramLongPollingBot {
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private AdsRepisitory adsRepisitory;
 
     final BotConfig config;
     static final String HELP_TEXT = " egea";
@@ -172,6 +178,8 @@ public class TelegramBot extends TelegramLongPollingBot {
     private void openMenu(long chatId, String message) {
         SendMessage messages = new SendMessage();
         messages.setChatId(String.valueOf(chatId));
+        messages.setText(message);
+        prepareAndSendMessage(chatId, message);
         ReplyKeyboardMarkup keyboardMarkup = new ReplyKeyboardMarkup();
 
         List<KeyboardRow> keyboardRows = new ArrayList<>();
@@ -217,5 +225,16 @@ public class TelegramBot extends TelegramLongPollingBot {
         message.setText(textToSend);
         executeMessage(message);
 
+    }
+
+    @Scheduled(cron = "${cron.scheduler}")
+    private void SendAds(){
+        var ads = adsRepisitory.findAll();
+        var users = userRepository.findAll();
+
+        for(Ads ad: ads){
+            for (User user:users)
+                prepareAndSendMessage(user.getChatID(), ad.getAd());
+        }
     }
 }
