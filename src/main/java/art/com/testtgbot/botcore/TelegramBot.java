@@ -1,13 +1,18 @@
-package art.com.testtgbot.service;
+package art.com.testtgbot.botcore;
 
+import art.com.testtgbot.botcommands.CommandContainer;
+import art.com.testtgbot.botcommands.CommandInterface;
+import art.com.testtgbot.botcommands.DisplayCommands;
 import art.com.testtgbot.config.BotConfig;
 import art.com.testtgbot.model.Ads;
 import art.com.testtgbot.model.AdsRepisitory;
 import art.com.testtgbot.model.User;
 import art.com.testtgbot.model.UserRepository;
+import art.com.testtgbot.service.MessageServiceImp;
 import com.vdurmont.emoji.EmojiParser;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
@@ -27,22 +32,35 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 @Slf4j
 @Component
 public class TelegramBot extends TelegramLongPollingBot {
+
+    public static String COMMAND_PREFIX ="/";
+    private final BotConfig config;
     @Autowired
     private UserRepository userRepository;
 
     @Autowired
     private AdsRepisitory adsRepisitory;
 
-    final BotConfig config;
+    private CommandInterface commandInterface;
+    @Value("${bot.name}")
+    private String username;
+
+    @Value("${bot.key}")
+    private String token;
+
     static final String HELP_TEXT = " egea";
     static final String YES_BUTTON = "YES_BUTTON";
     static final String NO_BUTTON = "NO_BUTTON";
-    public TelegramBot(BotConfig config) {
-        this.config = config;
+    private static CommandContainer commandContainer;
+    private static DisplayCommands displayCommands;
+    public TelegramBot(BotConfig botConfig){
+        this.config = botConfig;
+        this.commandContainer = new CommandContainer(new MessageServiceImp(this));
         List<BotCommand> botCommandList = new ArrayList<>();
         botCommandList.add(new BotCommand("/start", "Начало пользования ботом"));
         botCommandList.add(new BotCommand("/mydata", "Получить информацию о пользователе"));
@@ -57,60 +75,25 @@ public class TelegramBot extends TelegramLongPollingBot {
     }
     @Override
     public String getBotUsername() {
-        return config.getBotName();
+        return username;
     }
 
     @Override
     public String getBotToken() {
-        return config.getBotToken();
+        return token;
     }
-
 
     @Override
     public void onUpdateReceived(Update update) {
         if (update.hasMessage() && update.getMessage().hasText()) {
             String messageText = update.getMessage().getText();
             long chatId = update.getMessage().getChatId();
+            if (messageText.startsWith(COMMAND_PREFIX)){
+                String commandID = messageText.split(" ")[0].toLowerCase(Locale.ROOT);
 
-            if(messageText.contains("/send") && config.getBotOwnerID() == chatId){
-                var textToSend = EmojiParser.parseToUnicode(messageText.substring(messageText.indexOf(" ")));
-                var users = userRepository.findAll();
-                for (User user : users){
-                    prepareAndSendMessage(user.getChatID(), textToSend);
-                }
-            }else{
-                switch (update.getMessage().getText()) {
-                    case "/start":
-                        registerUser(update.getMessage());
-                        startCommandRecievd(chatId, update.getMessage().getChat().getFirstName());
-                        break;
-                    case "/help":
-                        prepareAndSendMessage(chatId, HELP_TEXT);
-                        break;
-                    case "/register":
+                commandContainer.retrieveCommand(commandID).execute(update);
 
-                        register(chatId);
-                        break;
-                    case "/send":
-                        break;
-                    default:
-                        prepareAndSendMessage(chatId, "Sry cmd not recognized");
-                        break;
-                }
             }
-        } else  if (update.hasCallbackQuery()){
-            String callbackData = update.getCallbackQuery().getData();
-            long messageID = update.getCallbackQuery().getMessage().getMessageId();
-            long chatID = update.getCallbackQuery().getMessage().getChatId();
-
-            if(callbackData.equals(YES_BUTTON)){
-                String text = "You pressed yes";
-                executeEditMessageText(text, chatID, messageID);
-            } else if (callbackData.equals(NO_BUTTON)) {
-                String text = "You pressed No";
-                executeEditMessageText(text, chatID, messageID);
-            }
-
         }
     }
 
@@ -157,14 +140,6 @@ public class TelegramBot extends TelegramLongPollingBot {
             userRepository.save(user);
             log.info("user saved" + user);
         }
-    }
-
-    private void startCommandRecievd(long chatId, String firstName){
-        // String answ = "Hello there " + firstName + " you look great";
-        String answ = EmojiParser.parseToUnicode("Hello there " + firstName + " you look great" + ":blush:");
-        log.info("reply: " + answ);
-
-        openMenu(chatId, answ);
     }
 
     private void executeEditMessageText(String text, long chatID, long messageID){
