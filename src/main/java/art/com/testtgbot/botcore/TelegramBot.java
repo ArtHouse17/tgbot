@@ -1,15 +1,13 @@
 package art.com.testtgbot.botcore;
 
 import art.com.testtgbot.botcommands.CommandContainer;
+import art.com.testtgbot.botcommands.CommandDisplay;
 import art.com.testtgbot.botcommands.CommandInterface;
-import art.com.testtgbot.botcommands.DisplayCommands;
-import art.com.testtgbot.config.BotConfig;
 import art.com.testtgbot.model.Ads;
 import art.com.testtgbot.model.AdsRepisitory;
 import art.com.testtgbot.model.User;
 import art.com.testtgbot.model.UserRepository;
 import art.com.testtgbot.service.MessageServiceImp;
-import com.vdurmont.emoji.EmojiParser;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -39,7 +37,6 @@ import java.util.Locale;
 public class TelegramBot extends TelegramLongPollingBot {
 
     public static String COMMAND_PREFIX ="/";
-    private final BotConfig config;
     @Autowired
     private UserRepository userRepository;
 
@@ -57,21 +54,9 @@ public class TelegramBot extends TelegramLongPollingBot {
     static final String YES_BUTTON = "YES_BUTTON";
     static final String NO_BUTTON = "NO_BUTTON";
     private static CommandContainer commandContainer;
-    private static DisplayCommands displayCommands;
-    public TelegramBot(BotConfig botConfig){
-        this.config = botConfig;
-        this.commandContainer = new CommandContainer(new MessageServiceImp(this));
-        List<BotCommand> botCommandList = new ArrayList<>();
-        botCommandList.add(new BotCommand("/start", "Начало пользования ботом"));
-        botCommandList.add(new BotCommand("/mydata", "Получить информацию о пользователе"));
-        botCommandList.add(new BotCommand("/mydatadelete", "Удаление персональных данных"));
-        botCommandList.add(new BotCommand("/help", "Описание команд для бота"));
-        botCommandList.add(new BotCommand("/settings", "Изменение настроек бота"));
-        try {
-            this.execute(new SetMyCommands(botCommandList, new BotCommandScopeDefault(), null));
-        } catch (TelegramApiException e) {
-            log.error("Err sett");
-        }
+    private static CommandDisplay commandDisplay;
+    public TelegramBot(){
+        commandContainer = new CommandContainer(new MessageServiceImp(this));
     }
     @Override
     public String getBotUsername() {
@@ -85,6 +70,13 @@ public class TelegramBot extends TelegramLongPollingBot {
 
     @Override
     public void onUpdateReceived(Update update) {
+        commandDisplay = new CommandDisplay();
+        List<BotCommand> botCommands = commandDisplay.display();
+        try {
+            this.execute(new SetMyCommands(botCommands, new BotCommandScopeDefault(), null));
+        } catch (TelegramApiException e) {
+            log.error("Err sett");
+        }
         if (update.hasMessage() && update.getMessage().hasText()) {
             String messageText = update.getMessage().getText();
             long chatId = update.getMessage().getChatId();
@@ -92,7 +84,6 @@ public class TelegramBot extends TelegramLongPollingBot {
                 String commandID = messageText.split(" ")[0].toLowerCase(Locale.ROOT);
 
                 commandContainer.retrieveCommand(commandID).execute(update);
-
             }
         }
     }
