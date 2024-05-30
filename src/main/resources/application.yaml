@@ -1,0 +1,27 @@
+spring:
+  application:
+    name: testtgbot
+  jpa:
+    hibernate:
+      ddl-auto: update
+    database: postgresql
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    show-sql: true
+  datasource:
+    url: jdbc:postgresql://localhost:5432/postgres
+    username: user
+    password: 1234
+    driver-class-name: org.postgresql.Driver
+
+bot:
+  name: learnproj_bot
+  key: 7416554520:AAFKIvD8_gUUzRfrZvY3g_opvFqXbx_cwPY
+  owner: 5118893958
+
+cron:
+  scheduler: '0 15 * * * *'
+
+menu:
+  commands:
+    help : "Some help val"
+    thanks : "some thanks value"

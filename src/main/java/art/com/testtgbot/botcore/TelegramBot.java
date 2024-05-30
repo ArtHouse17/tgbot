@@ -1,8 +1,8 @@
 package art.com.testtgbot.botcore;
 
 import art.com.testtgbot.botcommands.CommandContainer;
-import art.com.testtgbot.botcommands.CommandDisplay;
-import art.com.testtgbot.botcommands.CommandInterface;
+import art.com.testtgbot.menu.CommandDisplay;
+import art.com.testtgbot.menu.MenuConfig;
 import art.com.testtgbot.model.Ads;
 import art.com.testtgbot.model.AdsRepisitory;
 import art.com.testtgbot.model.User;
@@ -32,6 +32,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+
 @Slf4j
 @Component
 public class TelegramBot extends TelegramLongPollingBot {
@@ -43,18 +44,15 @@ public class TelegramBot extends TelegramLongPollingBot {
     @Autowired
     private AdsRepisitory adsRepisitory;
 
-    private CommandInterface commandInterface;
     @Value("${bot.name}")
     private String username;
 
     @Value("${bot.key}")
     private String token;
 
-    static final String HELP_TEXT = " egea";
     static final String YES_BUTTON = "YES_BUTTON";
     static final String NO_BUTTON = "NO_BUTTON";
     private static CommandContainer commandContainer;
-    private static CommandDisplay commandDisplay;
     public TelegramBot(){
         commandContainer = new CommandContainer(new MessageServiceImp(this));
     }
@@ -70,16 +68,15 @@ public class TelegramBot extends TelegramLongPollingBot {
 
     @Override
     public void onUpdateReceived(Update update) {
-        commandDisplay = new CommandDisplay();
+        CommandDisplay commandDisplay = new CommandDisplay();
         List<BotCommand> botCommands = commandDisplay.display();
         try {
             this.execute(new SetMyCommands(botCommands, new BotCommandScopeDefault(), null));
         } catch (TelegramApiException e) {
-            log.error("Err sett");
+            log.error("Error by" + e);
         }
         if (update.hasMessage() && update.getMessage().hasText()) {
             String messageText = update.getMessage().getText();
-            long chatId = update.getMessage().getChatId();
             if (messageText.startsWith(COMMAND_PREFIX)){
                 String commandID = messageText.split(" ")[0].toLowerCase(Locale.ROOT);
 
