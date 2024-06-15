@@ -10,7 +10,8 @@ public class CommandContainer {
     public CommandContainer(MessageServiceImp messageServiceImp){
         commandInterfaceImmutableMap = ImmutableMap.<String, CommandInterface>builder()
                 .put(HELP.getCommandName(),new help(messageServiceImp))
-                .put(START.getCommandName(), new Start(messageServiceImp)).build();
+                .put(START.getCommandName(), new Start(messageServiceImp))
+                .build();
         testCommand = new Test(messageServiceImp);
     }
 

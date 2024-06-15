@@ -2,7 +2,6 @@ package art.com.testtgbot.botcore;
 
 import art.com.testtgbot.botcommands.CommandContainer;
 import art.com.testtgbot.menu.CommandDisplay;
-import art.com.testtgbot.menu.MenuConfig;
 import art.com.testtgbot.model.Ads;
 import art.com.testtgbot.model.AdsRepisitory;
 import art.com.testtgbot.model.User;
@@ -37,7 +36,7 @@ import java.util.Locale;
 @Component
 public class TelegramBot extends TelegramLongPollingBot {
 
-    public static String COMMAND_PREFIX ="/";
+    public static String COMMAND_PREFIX = "/";
     @Autowired
     private UserRepository userRepository;
 
@@ -53,9 +52,11 @@ public class TelegramBot extends TelegramLongPollingBot {
     static final String YES_BUTTON = "YES_BUTTON";
     static final String NO_BUTTON = "NO_BUTTON";
     private static CommandContainer commandContainer;
-    public TelegramBot(){
+
+    public TelegramBot() {
         commandContainer = new CommandContainer(new MessageServiceImp(this));
     }
+
     @Override
     public String getBotUsername() {
         return username;
@@ -77,14 +78,15 @@ public class TelegramBot extends TelegramLongPollingBot {
         }
         if (update.hasMessage() && update.getMessage().hasText()) {
             String messageText = update.getMessage().getText();
-            if (messageText.startsWith(COMMAND_PREFIX)){
+            if (messageText.startsWith(COMMAND_PREFIX)) {
                 String commandID = messageText.split(" ")[0].toLowerCase(Locale.ROOT);
 
                 commandContainer.retrieveCommand(commandID).execute(update);
             }
         }
     }
-
+}
+/*
     private void register(Long chatId){
         SendMessage message = new SendMessage();
         message.setChatId(String.valueOf(chatId));
@@ -168,36 +170,5 @@ public class TelegramBot extends TelegramLongPollingBot {
         messages.setReplyMarkup(keyboardMarkup);
 
     }
-    private void executeMessage(SendMessage messageText){
-        try{
-            execute(messageText);
-        }catch (TelegramApiException e){
-            log.error("Error: " + e.getMessage());
-        }
-    }
-    private void executeMessage(EditMessageText messageText){
-        try{
-            execute(messageText);
-        }catch (TelegramApiException e){
-            log.error("Error: " + e.getMessage());
-        }
-    }
-    private void prepareAndSendMessage(long chatId, String textToSend){
-        SendMessage message = new SendMessage();
-        message.setChatId(String.valueOf(chatId));
-        message.setText(textToSend);
-        executeMessage(message);
-
-    }
-
-    @Scheduled(cron = "${cron.scheduler}")
-    private void SendAds(){
-        var ads = adsRepisitory.findAll();
-        var users = userRepository.findAll();
-
-        for(Ads ad: ads){
-            for (User user:users)
-                prepareAndSendMessage(user.getChatID(), ad.getAd());
-        }
-    }
 }
+*/

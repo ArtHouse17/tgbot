@@ -3,7 +3,7 @@ package art.com.testtgbot.botcommands;
 public enum CommandName {
     START("/start"),
     HELP("/help"),
-    TEST("/start");
+    TEST("/test");
     private final String commandName;
 
 
