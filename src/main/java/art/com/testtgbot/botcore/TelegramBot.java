@@ -2,7 +2,6 @@ package art.com.testtgbot.botcore;
 
 import art.com.testtgbot.botcommands.CommandContainer;
 import art.com.testtgbot.menu.CommandDisplay;
-import art.com.testtgbot.model.Ads;
 import art.com.testtgbot.model.AdsRepisitory;
 import art.com.testtgbot.model.User;
 import art.com.testtgbot.model.UserRepository;
@@ -10,24 +9,16 @@ import art.com.testtgbot.service.MessageServiceImp;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.commands.SetMyCommands;
-import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
-import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.commands.BotCommand;
 import org.telegram.telegrambots.meta.api.objects.commands.scope.BotCommandScopeDefault;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import java.sql.Timestamp;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
@@ -80,11 +71,12 @@ public class TelegramBot extends TelegramLongPollingBot {
             String messageText = update.getMessage().getText();
             if (messageText.startsWith(COMMAND_PREFIX)) {
                 String commandID = messageText.split(" ")[0].toLowerCase(Locale.ROOT);
-
                 commandContainer.retrieveCommand(commandID).execute(update);
+
             }
         }
     }
+
 }
 /*
     private void register(Long chatId){
@@ -114,23 +106,7 @@ public class TelegramBot extends TelegramLongPollingBot {
 
         executeMessage(message);
     }
-    private void registerUser(Message message) {
-        if(userRepository.findById(message.getChatId()).isEmpty()){
-            var chatId = message.getChatId();
-            var chat = message.getChat();
 
-            User user = new User();
-
-            user.setChatID(chatId);
-            user.setFirstName(chat.getFirstName());
-            user.setLastName(chat.getLastName());
-            user.setUserName(chat.getUserName());
-            user.setRegisteredAt(new Timestamp(System.currentTimeMillis()));
-
-            userRepository.save(user);
-            log.info("user saved" + user);
-        }
-    }
 
     private void executeEditMessageText(String text, long chatID, long messageID){
         EditMessageText messageText = new EditMessageText();

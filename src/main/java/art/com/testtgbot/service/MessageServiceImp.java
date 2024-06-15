@@ -3,6 +3,7 @@ package art.com.testtgbot.service;
 
 import art.com.testtgbot.botcore.TelegramBot;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
@@ -11,6 +12,7 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
  * иного сообщения команды
  */
 @Slf4j
+@Service
 public class MessageServiceImp implements MessageSenderinterface{
 
     private final TelegramBot telegramBot;

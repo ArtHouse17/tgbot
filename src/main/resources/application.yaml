@@ -14,8 +14,8 @@ spring:
     driver-class-name: org.postgresql.Driver
 
 bot:
-  name: learnproj_bot
-  key: 7416554520:AAEvdL6tpX9wxy35WEsOXXOf7MrqALMGhIQ
+  name: Lernjbot
+  key: 6244771295:AAEYHhKvgoKgvU2i--iw5GHu_eFNYygnVqo
   owner: 5118893958
 
 cron:

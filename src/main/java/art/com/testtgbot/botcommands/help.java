@@ -1,6 +1,7 @@
 package art.com.testtgbot.botcommands;
 
 import art.com.testtgbot.service.MessageServiceImp;
+import org.jvnet.hk2.annotations.Service;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
 public class help implements CommandInterface {
