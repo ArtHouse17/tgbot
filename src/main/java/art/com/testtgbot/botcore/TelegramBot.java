@@ -1,6 +1,7 @@
 package art.com.testtgbot.botcore;
 
 import art.com.testtgbot.botcommands.CommandContainer;
+import art.com.testtgbot.experimental.RegistrationforUser;
 import art.com.testtgbot.menu.CommandDisplay;
 import art.com.testtgbot.model.AdsRepisitory;
 import art.com.testtgbot.model.User;
@@ -42,7 +43,7 @@ public class TelegramBot extends TelegramLongPollingBot {
     static final String YES_BUTTON = "YES_BUTTON";
     static final String NO_BUTTON = "NO_BUTTON";
     private static CommandContainer commandContainer;
-
+    private static RegistrationforUser registrationforUser;
     public TelegramBot() {
         commandContainer = new CommandContainer(new MessageServiceImp(this));
     }
@@ -70,7 +71,10 @@ public class TelegramBot extends TelegramLongPollingBot {
             String messageText = update.getMessage().getText();
             if (messageText.startsWith(COMMAND_PREFIX)) {
                 String commandID = messageText.split(" ")[0].toLowerCase(Locale.ROOT);
-                commandContainer.retrieveCommand(commandID).execute(update);
+                commandContainer.retrieveCommand(commandID, update.getMessage()).execute(update);
+                if (commandID == "/start"){
+                    registrationforUser.registerUser(update.getMessage());
+                }
             }
         }
     }
