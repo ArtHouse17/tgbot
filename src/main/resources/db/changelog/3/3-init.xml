@@ -1,0 +1,37 @@
+<databaseChangeLog xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+
+    <changeSet id="3-1" author="ArtHouse17">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="ads_table"/>
+                <tableExists tableName="users_data_table"/>
+            </not>
+        </preConditions>
+        <createTable tableName="ads_table">
+            <column name="id" type="bigint">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="ad" type="varchar(255)"/>
+        </createTable>
+        <createTable tableName="users_data_table">
+            <column name="chatid" type="bigint">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="first_name" type="varchar(255)"/>
+            <column name="last_name" type="varchar(255)"/>
+            <column name="registered_at" type="timestamp"/>
+            <column name="user_name" type="varchar(255)"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="3-2" author="arthouse17">
+        <preConditions onFail="MARK_RAN">
+            <tableIsEmpty tableName="ads_table"/>
+        </preConditions>
+        <loadData tableName="ads_table" file="db/changelog/data/ads-data.csv"/>
+    </changeSet>
+
+</databaseChangeLog>

@@ -1,0 +1,22 @@
+databaseChangeLog :
+  - changeSet:
+      id: 3-1-1
+      author : ArtHouse17
+      preConditions:
+        - onFail: MARK_RAN
+        - not:
+            tableExists:
+              tableName: admins
+      changes:
+        - createTable:
+            tableName : admins
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  constraints:
+                    primaryKey : true
+                    foreignKeyName: id_fk
+                    referencedTableName: users_data_table
+                    referencedColumnNames: chatid
+                  autoIncrement : true

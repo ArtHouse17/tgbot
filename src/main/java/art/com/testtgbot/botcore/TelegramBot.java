@@ -13,12 +13,14 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.commands.SetMyCommands;
+import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.commands.BotCommand;
 import org.telegram.telegrambots.meta.api.objects.commands.scope.BotCommandScopeDefault;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.Locale;
 
@@ -72,13 +74,31 @@ public class TelegramBot extends TelegramLongPollingBot {
             if (messageText.startsWith(COMMAND_PREFIX)) {
                 String commandID = messageText.split(" ")[0].toLowerCase(Locale.ROOT);
                 commandContainer.retrieveCommand(commandID, update.getMessage()).execute(update);
-                if (commandID == "/start"){
-                    registrationforUser.registerUser(update.getMessage());
+
+                if (commandID.equals("/start")) {
+                    registerUser(update.getMessage());
                 }
+
             }
         }
     }
 
+    private void registerUser(Message message) {
+        if(userRepository.findById(message.getChatId()).isEmpty()){
+            var chatId = message.getChatId();
+            var chat = message.getChat();
+
+            User user = new User();
+
+            user.setChatID(chatId);
+            user.setFirstName(chat.getFirstName());
+            user.setLastName(chat.getLastName());
+            user.setUserName(chat.getUserName());
+            user.setRegisteredAt(new Timestamp(System.currentTimeMillis()));
+
+            userRepository.save(user);
+        }
+    }
 }
 /*
     private void register(Long chatId){
@@ -143,7 +163,6 @@ public class TelegramBot extends TelegramLongPollingBot {
         keyboardRows.add(row);
 
         keyboardMarkup.setKeyboard(keyboardRows);
-
 
         messages.setReplyMarkup(keyboardMarkup);
 

@@ -12,7 +12,8 @@ spring:
     username: postgres
     password: postgres
     driver-class-name: org.postgresql.Driver
-
+  liquibase :
+    change-log : db/changelog/main-changelog.xml
 bot:
   name: Lernjbot
   key: 6244771295:AAEYHhKvgoKgvU2i--iw5GHu_eFNYygnVqo
