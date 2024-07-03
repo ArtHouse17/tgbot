@@ -1,32 +1,47 @@
 package art.com.testtgbot.experimental;
 
-import art.com.testtgbot.model.User;
 import art.com.testtgbot.model.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.telegram.telegrambots.meta.api.objects.Message;
+import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 
-import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
+
 @Component
 public class RegistrationforUser {
 
     @Autowired
     private UserRepository userRepository;
 
-    public void registerUser(Message message) {
-        if(userRepository.findById(message.getChatId()).isEmpty()){
-            var chatId = message.getChatId();
-            var chat = message.getChat();
+    static final String YES_BUTTON = "YES_BUTTON";
+    static final String NO_BUTTON = "NO_BUTTON";
 
-            User user = new User();
+    public void showRows(SendMessage message){
 
-            user.setChatID(chatId);
-            user.setFirstName(chat.getFirstName());
-            user.setLastName(chat.getLastName());
-            user.setUserName(chat.getUserName());
-            user.setRegisteredAt(new Timestamp(System.currentTimeMillis()));
+        InlineKeyboardMarkup markup = new InlineKeyboardMarkup();
 
-            userRepository.save(user);
-        }
+        List<List<InlineKeyboardButton>> rowsLine = new ArrayList<>();
+        List<InlineKeyboardButton> rowInLine = new ArrayList<>();
+        var yes_button = new InlineKeyboardButton();
+        yes_button.setText("Yes");
+        yes_button.setCallbackData(YES_BUTTON);
+
+        var no_button = new InlineKeyboardButton();
+        no_button.setText("No");
+        no_button.setCallbackData(NO_BUTTON);
+
+        rowInLine.add(yes_button);
+        rowInLine.add(no_button);
+
+        rowsLine.add(rowInLine);
+
+        markup.setKeyboard(rowsLine);
+        message.setReplyMarkup(markup);
+
     }
+
+
 }

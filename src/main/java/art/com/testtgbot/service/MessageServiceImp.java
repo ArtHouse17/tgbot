@@ -2,6 +2,8 @@ package art.com.testtgbot.service;
 
 
 import art.com.testtgbot.botcore.TelegramBot;
+import art.com.testtgbot.experimental.KeyBoardRow;
+import art.com.testtgbot.experimental.RegistrationforUser;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -36,6 +38,14 @@ public class MessageServiceImp implements MessageSenderinterface{
         sendMessage.setChatId(String.valueOf(chatId));
         sendMessage.setText(message);
 
+        RegistrationforUser registrationforUser = new RegistrationforUser();
+        KeyBoardRow keyBoardRow = new KeyBoardRow();
+
+        keyBoardRow.openMenu(sendMessage);
+
+        if (sendMessage.getText().equals("starttext")) {
+            registrationforUser.showRows(sendMessage);
+        }
         try{
             telegramBot.execute(sendMessage);
         }catch (TelegramApiException e){
